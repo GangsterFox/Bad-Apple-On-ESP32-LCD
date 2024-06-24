@@ -16,7 +16,7 @@ print('Creating .ino file...\n')
 # Specify from which to which frame to play
 # If data exceeds the limit on the board, either decrease the amount of frames or use a sd card
 
-start, end = 1, 1898
+start, end = 1, 5255
 
 # _______________________arduino script_______________________ #
 print("Writing script...\n")

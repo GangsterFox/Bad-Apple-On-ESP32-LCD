@@ -19,12 +19,13 @@ Make sure you have:
     * If you don't want to use I2C: 
         * delete the current diagram
       * rename `diagramNoI2C.json` to `diagram.json` 
+      * comment out the LCD_I2C library in `platformio.ini`
       * run `mainNoI2C.py` to get the correct .ino file. From here, follow step 3 below.
 
 Once you have all of that:
 
 1. Edit main.py with how many frames you'd like
-    * currently it's set to start from frame 1 and end on frame 1898 (all frames)
+    * currently it's set to start from frame 1 and end on frame 5255 (all frames)
 2. Run main.py
     * this will create `output.ino` in `src` after converting all png's into binary
 3. Run `pio run` in terminal

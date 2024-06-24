@@ -1,12 +1,4 @@
-#include <LiquidCrystal_I2C.h>
-const byte UA1[] PROGMEM = {0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000};
-const byte UB1[] PROGMEM = {0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000};
-const byte UC1[] PROGMEM = {0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000};
-const byte UD1[] PROGMEM = {0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000};
-const byte BA1[] PROGMEM = {0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000};
-const byte BB1[] PROGMEM = {0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000};
-const byte BC1[] PROGMEM = {0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000};
-const byte BD1[] PROGMEM = {0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000};
+#include <LiquidCrystal.h>
 const byte UA2[] PROGMEM = {0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000};
 const byte UB2[] PROGMEM = {0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000};
 const byte UC2[] PROGMEM = {0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000};
@@ -15184,7 +15176,6 @@ const byte BB1898[] PROGMEM = {0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00
 const byte BC1898[] PROGMEM = {0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000};
 const byte BD1898[] PROGMEM = {0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000, 0b00000};
 const uint8_t* const frames[][8] PROGMEM = {
-  {UA1, UB1, UC1, UD1, BA1, BB1, BC1, BD1},
   {UA2, UB2, UC2, UD2, BA2, BB2, BC2, BD2},
   {UA3, UB3, UC3, UD3, BA3, BB3, BC3, BD3},
   {UA4, UB4, UC4, UD4, BA4, BB4, BC4, BD4},
@@ -17083,12 +17074,12 @@ const uint8_t* const frames[][8] PROGMEM = {
   {UA1897, UB1897, UC1897, UD1897, BA1897, BB1897, BC1897, BD1897},
   {UA1898, UB1898, UC1898, UD1898, BA1898, BB1898, BC1898, BD1898},
 };
-LiquidCrystal_I2C lcd(0x27, 16, 2);
+LiquidCrystal lcd(19, 23, 18, 21, 5, 15);
 const int totalFrames = sizeof(frames) / sizeof(frames[0]);
 
 void setup() {
   // Initialize the LCD
-  lcd.init();
+  lcd.begin(16, 2);
 
   // Start displaying frames from the first frame
   int currentFrame = 0;
@@ -17121,5 +17112,5 @@ void loop() {
   currentFrame = (currentFrame + 1) % totalFrames;
 
   // Add a delay to control the frame rate
-  //delay(500);
+  delay(80);
 }

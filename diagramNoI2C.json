@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "author": "LilyFox",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-esp32-devkit-v1", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-lcd1602", "id": "lcd1", "top": -188.57, "left": -233.6, "attrs": {} }
+  ],
+  "connections": [
+    [ "esp:TX0", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX0", "$serialMonitor:TX", "", [] ],
+    [ "lcd1:RS", "esp:D19", "green", [ "v0" ] ],
+    [ "lcd1:E", "esp:D23", "green", [ "v0" ] ],
+    [ "lcd1:D4", "esp:D18", "green", [ "v0" ] ],
+    [ "lcd1:D5", "esp:D21", "green", [ "v0" ] ],
+    [ "lcd1:D6", "esp:D5", "green", [ "v0" ] ],
+    [ "lcd1:D7", "esp:D15", "green", [ "v201.6", "h178.4" ] ],
+    [ "lcd1:K", "esp:GND.2", "green", [ "v0" ] ],
+    [ "lcd1:A", "esp:3V3", "green", [ "v0" ] ]
+  ],
+  "dependencies": {}
+}

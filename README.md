@@ -17,9 +17,9 @@ Make sure you have:
 * Choose what you want to use:
     * If you want to use I2C, continue the guide as written below
     * If you don't want to use I2C: 
-        1. delete the current diagram
-        2. rename `diagramNoI2C.json` to `diagram.json` 
-        3. run `mainNoI2C.py` to get the correct .ino file. From here, follow step 3 below.
+        * delete the current diagram
+      * rename `diagramNoI2C.json` to `diagram.json` 
+      * run `mainNoI2C.py` to get the correct .ino file. From here, follow step 3 below.
 
 Once you have all of that:
 

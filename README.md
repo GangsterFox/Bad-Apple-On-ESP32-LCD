@@ -6,7 +6,7 @@ This should theoretically work on an Arduino as well, but I ran into a lot of is
 * Frames are duplicated
 * Garbled data shown on the LCD
 * Not enough storage (PROGMEM on Arduino is just 32KB, we need around ~520KB of space for all frames)
-
+## 2 different variations
 * `main.py` is to create the version with I2C, much slower than running the LCD directly in the simulator ([diagram](https://github.com/GangsterFox/Bad-Apple-On-ESP32-LCD/blob/main/diagram.json))
 * `mainNoI2C.py` is to create the version without I2C, runs much faster on the simulator ([diagram](https://github.com/GangsterFox/Bad-Apple-On-ESP32-LCD/blob/main/diagramNoI2C.json))
 

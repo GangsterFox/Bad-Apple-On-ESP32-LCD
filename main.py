@@ -52,6 +52,7 @@ with open('src/output.txt', 'w') as f:
     f.write("void setup() {\n")
     f.write("  // Initialize the LCD\n")
     f.write("  lcd.init();\n\n")
+    f.write("  lcd.backlight();\n")
     f.write("  // Start displaying frames from the first frame\n")
     f.write("  int currentFrame = 0;\n")
     f.write("  createAndDisplayCharacters(currentFrame);\n")

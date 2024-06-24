@@ -1,4 +1,6 @@
-import pygame, os, glob
+import pygame
+import os
+import glob
 from convert import U1, U2, U3, U4, D1, D2, D3, D4
 
 print("Converting frames to pixel format...")
@@ -7,115 +9,80 @@ print(f"Converted {len(glob.glob('convImages/*'))} frames \n")
 
 # Dont mind this, it is just for refreshing the file once the code has exectued
 try:
-    os.remove('output.ino')
+    os.remove('src/output.ino')
 except:pass
 print('Creating .ino file...\n')
 
 # Specify from which to which frame to play
 # If data exceeds the limit on the board, either decrease the amount of frames or use a sd card
-start, end = 975, 1000
+
+start, end = 0, 1898
 
 # _______________________arduino script_______________________ #
 print("Writing script...\n")
-with open('output.txt', 'w') as f:
-    f.write(f"#include <LiquidCrystal.h>\n")
+with open('src/output.txt', 'w') as f:
+    f.write(f"#include <LiquidCrystal_I2C.h>\n")
 
-    f.write(f"const int rs = 12, rw = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;\n")
+    
 
     for i in range(start, end):
-        f.write(f"byte UA{i+1}[8] = " + str("{" + str(U1[i])[1:-1].replace("'", "") + "};\n"))
-        f.write(f"byte UB{i+1}[8] = " + str("{" + str(U2[i])[1:-1].replace("'", "") + "};\n"))
-        f.write(f"byte UC{i+1}[8] = " + str("{" + str(U3[i])[1:-1].replace("'", "") + "};\n"))
-        f.write(f"byte UD{i+1}[8] = " + str("{" + str(U4[i])[1:-1].replace("'", "") + "};\n"))
+        f.write(f"const byte UA{i+1}[] PROGMEM = " + str("{" + str(U1[i])[1:-1].replace("'", "") + "};\n"))
+        f.write(f"const byte UB{i+1}[] PROGMEM = " + str("{" + str(U2[i])[1:-1].replace("'", "") + "};\n"))
+        f.write(f"const byte UC{i+1}[] PROGMEM = " + str("{" + str(U3[i])[1:-1].replace("'", "") + "};\n"))
+        f.write(f"const byte UD{i+1}[] PROGMEM = " + str("{" + str(U4[i])[1:-1].replace("'", "") + "};\n"))
 
-        f.write(f"byte BA{i+1}[8] = " + str("{" + str(D1[i])[1:-1].replace("'", "") + "};\n"))
-        f.write(f"byte BB{i+1}[8] = " + str("{" + str(D2[i])[1:-1].replace("'", "") + "};\n"))
-        f.write(f"byte BC{i+1}[8] = " + str("{" + str(D3[i])[1:-1].replace("'", "") + "};\n"))
-        f.write(f"byte BD{i+1}[8] = " + str("{" + str(D4[i])[1:-1].replace("'", "") + "};\n"))
+        f.write(f"const byte BA{i+1}[] PROGMEM = " + str("{" + str(D1[i])[1:-1].replace("'", "") + "};\n"))
+        f.write(f"const byte BB{i+1}[] PROGMEM = " + str("{" + str(D2[i])[1:-1].replace("'", "") + "};\n"))
+        f.write(f"const byte BC{i+1}[] PROGMEM = " + str("{" + str(D3[i])[1:-1].replace("'", "") + "};\n"))
+        f.write(f"const byte BD{i+1}[] PROGMEM = " + str("{" + str(D4[i])[1:-1].replace("'", "") + "};\n"))
+        
 
-
-    f.write(f"LiquidCrystal lcd(rs, rw, d4, d5, d6, d7);\n")
-
+    f.write("const uint8_t* const frames[][8] PROGMEM = {\n")
+    lists = [(U1, "UA"), (U2, "UB"), (U3, "UC"), (U4, "UD"), (D1, "BA"), (D2, "BB"), (D3, "BC"), (D4, "BD")]
+    for i in range(start, end):
+        set_items = []  # Items in the current set
+        for list, prefix in lists:
+            if i < len(list):
+                set_items.append(f"{prefix}{i+1}")
+        f.write("  {" + ", ".join(set_items) + "},\n")  # Write the entire set at once
+    f.write("};\n")
+    f.write("LiquidCrystal_I2C lcd(0x27, 16, 2);\n")
+    f.write("const int totalFrames = sizeof(frames) / sizeof(frames[0]);\n\n")
+    
     f.write("void setup() {\n")
-    f.write(f"  Serial.begin(9600);\n")
-    f.write(f"  lcd.begin(16,2);\n")
-
-    f.write("}\n")
-
+    f.write("  // Initialize the LCD\n")
+    f.write("  lcd.init();\n\n")
+    f.write("  // Start displaying frames from the first frame\n")
+    f.write("  int currentFrame = 0;\n")
+    f.write("  createAndDisplayCharacters(currentFrame);\n")
+    f.write("}\n\n")
+    
+    f.write("void createAndDisplayCharacters(int frame) {\n")
+    f.write("  for (int i = 0; i < 8; i++) {\n")
+    f.write("    uint8_t data[8];\n")
+    f.write("    for (int j = 0; j < 8; j++) {\n")
+    f.write("      data[j] = pgm_read_byte(&(frames[frame][i][j]));\n")
+    f.write("    }\n")
+    f.write("    lcd.createChar(i, data);  // Store the character in the LCD's memory\n\n")
+    f.write("    // Display the character\n")
+    f.write("    if (i < 4) {\n")
+    f.write("      lcd.setCursor(i, 0);\n")
+    f.write("    } else {\n")
+    f.write("      lcd.setCursor(i - 4, 1);\n")
+    f.write("    }\n")
+    f.write("    lcd.write((uint8_t)i);\n")
+    f.write("  }\n")
+    f.write("}\n\n")
+    
     f.write("void loop() {\n")
-
-    count = 0
-    write_count = 0
-    for i in range(start+1, end):
-        if count >= 7:
-            count = 0
-        if write_count >= 7:
-            write_count = 0
-
-        f.write(f"lcd.createChar({count},  UA{i});\n")
-        count += 1
-        f.write(f"lcd.createChar({count},  UB{i});\n")
-        count += 1
-        f.write(f"lcd.createChar({count},  UC{i});\n")
-        count += 1
-        f.write(f"lcd.createChar({count},  UD{i});\n")
-
-        count += 1
-        f.write(f"lcd.createChar({count},  BA{i});\n")
-        count += 1
-        f.write(f"lcd.createChar({count},  BB{i});\n")
-        count += 1
-        f.write(f"lcd.createChar({count},  BC{i});\n")
-        count += 1
-        f.write(f"lcd.createChar({count},  BD{i});\n")
-        count += 1
-
-        f.write(f"lcd.setCursor(6, 0);\n")
-        f.write(f"lcd.write((uint8_t){write_count});\n")
-        write_count += 1
-        f.write(f"lcd.setCursor(7, 0);\n")
-        f.write(f"lcd.write((uint8_t){write_count});\n")
-        write_count += 1
-        f.write(f"lcd.setCursor(8, 0);\n")
-        f.write(f"lcd.write((uint8_t){write_count});\n")
-        write_count += 1
-        f.write(f"lcd.setCursor(9, 0);\n")
-        f.write(f"lcd.write((uint8_t){write_count});\n")
-        write_count += 1
-        f.write(f"lcd.setCursor(6, 1);\n")
-        f.write(f"lcd.write((uint8_t){write_count});\n")
-        write_count += 1
-        f.write(f"lcd.setCursor(7, 1);\n")
-        f.write(f"lcd.write((uint8_t){write_count});\n")
-        write_count += 1
-        f.write(f"lcd.setCursor(8, 1);\n")
-        f.write(f"lcd.write((uint8_t){write_count});\n")
-        write_count += 1
-        f.write(f"lcd.setCursor(9, 1);\n")
-        f.write(f"lcd.write((uint8_t){write_count});\n")
-        write_count += 1
-
-        f.write("delay(100);\n")
-
-
+    f.write("  static int currentFrame = 0;\n")
+    f.write("  createAndDisplayCharacters(currentFrame);\n\n")
+    f.write("  // Increment the frame counter and reset if it exceeds the total frames\n")
+    f.write("  currentFrame = (currentFrame + 1) % totalFrames;\n\n")
+    f.write("  // Add a delay to control the frame rate\n")
+    f.write("  //delay(500);\n")
     f.write("}\n")
 # _____________________________________________________________#
 print('Done\n')
 
-os.rename('output.txt', os.path.splitext('output.txt')[0] + '.ino')
-
-os.system("arduino-cli compile --upload output.ino --port COM4 --fqbn arduino:avr:uno")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+os.rename('src/output.txt', os.path.splitext('src/output.txt')[0] + '.ino')

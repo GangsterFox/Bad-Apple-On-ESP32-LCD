@@ -81,7 +81,7 @@ with open('src/output.txt', 'w') as f:
     f.write("  // Increment the frame counter and reset if it exceeds the total frames\n")
     f.write("  currentFrame = (currentFrame + 1) % totalFrames;\n\n")
     f.write("  // Add a delay to control the frame rate\n")
-    f.write("  delay(80);\n")
+    f.write("  delay(41);\n")
     f.write("}\n")
 # _____________________________________________________________#
 print('Done\n')

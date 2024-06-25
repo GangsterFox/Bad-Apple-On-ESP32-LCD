@@ -1,6 +1,8 @@
 Runs Bad Apple using an ESP32 and an LCD, forked from SpaceWasTaken's Repo and improved.
 
 # Quick Explain
+We take 20x16 png's, convert them to binary to then convert them into ino code for you to run.
+
 This runs on an ESP32, all frames are stored in PROGMEM.
 This should theoretically work on an Arduino as well, but I ran into a lot of issues:
 * Frames are duplicated
@@ -35,3 +37,10 @@ Once you have all of that:
 
 ## [Demo I2C](https://wokwi.com/projects/401565888569363457)
 ## [Demo no I2C](https://wokwi.com/projects/401580486406255617)
+
+# How to create your own animations
+* ffmpeg my beloved.
+* Use `ffmpeg -i input.mp4 -vf "fps=24,scale=20:16" "png (%d).png"` to create your png's
+* Put those png's into the png's folder and run main.py
+
+  **Disclaimer:** the more frames you have, the longer it takes to compile. Make sure to edit `convert.py` to use a proper range to convert all frames

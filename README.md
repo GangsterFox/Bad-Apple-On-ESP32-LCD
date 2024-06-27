@@ -37,6 +37,7 @@ Once you have all of that:
 
 ## [Demo I2C](https://wokwi.com/projects/401565888569363457)
 ## [Demo no I2C](https://wokwi.com/projects/401580486406255617)
+## [Demo on an Arduino Uno](https://wokwi.com/projects/401839441689802753)
 
 # How to create your own animations
 * ffmpeg my beloved.
